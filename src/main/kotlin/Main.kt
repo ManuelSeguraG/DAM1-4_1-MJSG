@@ -2,7 +2,6 @@
 - (1) establecerNota(idAlumno:String, evaluacion:String, nota:Float): Boolean
 X (2) calculaEvaluacionFinal()
 - (3) listaNotas(evaluacion:String): List<Pair>
-- (4) numeroAprobados(evaluacion:String): Int
 - (5) notaMasBaja(evaluacion:String): Float
 - (6) notaMasAlta(evaluacion:String): Float
 - (7) notaMedia(evaluacion:String): Float
@@ -26,6 +25,7 @@ class Modulo(
     var alumnosOrdenados = arrayOfNulls<Alumno>(maxAlumnos)
     var evaluaciones = Array(5) { arrayOfNulls<String>(maxAlumnos) }
     var almacenIndex: Int = 0
+    var almacenAprobados: Int = 0
 
 
     fun matricularAlumno(alumno: Alumno): Boolean {
@@ -76,16 +76,40 @@ class Modulo(
     //TESTING ONLY
     fun establecerNotaV1() {
         for (i in 0..maxAlumnos - 1) {
-            evaluaciones[1][i] = (0..10).random().toDouble().toString()
-            evaluaciones[2][i] = (0..10).random().toDouble().toString()
-            evaluaciones[3][i] = (0..10).random().toDouble().toString()
-            evaluaciones[4][i] = (0..10).random().toDouble().toString()
+            evaluaciones[1][i] = (0..10).random().toFloat().toString()
+            evaluaciones[2][i] = (0..10).random().toFloat().toString()
+            evaluaciones[3][i] = (0..10).random().toFloat().toString()
+            evaluaciones[4][i] = (0..10).random().toFloat().toString()
         }
     }
 
-    fun listaNotas(): List<Pair> {
-        var (idAlumno, NotaAlumno) = Pair ("", "")
+    fun imprimirNotas(evaluacion: String) {
+        println("--------------------------------")
+        println("LISTA NOTAS EVALUACION $evaluacion")
+        println("--------------------------------")
+        evaluaciones[evaluacion.toInt()].forEach { print("|$it| ") }
+        println("--------------------------------")
+        println("")
     }
+
+//    fun listaNotas(): List<Pair> {
+//        var (idAlumno, NotaAlumno) = Pair ("", "")
+//    }
+
+    fun numeroAprobados(evaluacion: String): Int {
+        almacenAprobados = 0
+        evaluaciones[evaluacion.toInt()].forEach {
+            when (it?.toFloatOrNull()!!) {
+                in 5.0f..10.0f -> almacenAprobados++
+            }
+        }
+        return almacenAprobados
+    }
+
+    fun notaMasBaja(evaluacion: String): Float {
+        evaluaciones[evaluacion.toInt()].
+    }
+
 
 }
 
@@ -103,5 +127,8 @@ fun main() {
     moduloPROG.imprimirListaAlumnos()
 
     moduloPROG.establecerNotaV1()
+    moduloPROG.imprimirNotas("1")
+
+    println(moduloPROG.numeroAprobados("1"))
 
 }
